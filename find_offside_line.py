@@ -95,7 +95,7 @@ def find_offside_line(path):
     plt.imshow(canny) # canny에서 구분 잘 안되면 다시
     plt.show()
 
-    lines = cv2.HoughLines(canny,1,np.pi/180,200)
+    lines = cv2.HoughLines(canny,1,np.pi/180,150)
 
     line_points = []
     offside_lines = []
@@ -124,14 +124,14 @@ def find_offside_line(path):
             line_points.append([r_x+x1,r_y+y1,r_x+x2,r_y+y2])
             offside_lines.append([ret_m, ret_y_int])
 
-            cv2.line(img,(r_x+x1,r_y+y1),(r_x+x2,r_y+y2),(255,0,0),2)
+            # cv2.line(img,(r_x+x1,r_y+y1),(r_x+x2,r_y+y2),(255,0,0),2)
 
     v_x, v_y = return_intersection(offside_lines, line_points)
-    print(v_x, v_y)
+    print("Vanishing point: ", v_x, ", ",v_y)
 
-    cv2.line(img,(v_x, v_y),(1000, 1080),(0,0,255),2)
-    plt.imshow(img)
-    plt.show()
+    # cv2.line(img,(v_x, v_y),(1000, 1080),(0,0,255),2)
+    # plt.imshow(img)
+    # plt.show()
 
     return (v_x, v_y)
 
