@@ -1,7 +1,18 @@
+import os
 import argparse
+import cv2
+import glob
 from yolov7.detect import detect
 from find_offside_line import find_offside_line
+from find_team import find_team
+from find_team import createDirectory
+from tragectory_converter import tragectory_converter
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+from sklearn.cluster import KMeans
 
+os.environ["OMP_NUM_THREADS"] = "1" 
 
 if __name__ == '__main__':
 
@@ -39,6 +50,8 @@ if __name__ == '__main__':
     # find_team(stopover)
     # 4. draw offside line
     find_offside_line(stopover)
+    find_team(opt)
+    tragectory_converter(opt)
     # 5. +@ find pass frame
 
 
