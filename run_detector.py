@@ -25,15 +25,21 @@ if __name__ == '__main__':
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
     parser.add_argument('--detect-offside', action='store_true', help='show offside line')
+    parser.add_argument('--stopover', default='runs/detect/exp', help='save result')
     opt = parser.parse_args()
     print(opt)
 
     # 1. yolo detect
+    detect(opt)
     # 2. trajectory_convert
+    stopover = opt.stopover
+    print(stopover)
+    # trajectory_convert(stopover)
     # 3. team classify
+    # find_team(stopover)
     # 4. draw offside line
+    find_offside_line(stopover)
     # 5. +@ find pass frame
 
-    detect(opt)
 
     #find_offside_line('C:/Users/y/Desktop/URP/test_fifa1.png')
