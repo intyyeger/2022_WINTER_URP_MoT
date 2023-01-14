@@ -13,6 +13,7 @@ def return_green_area(src_img): # image green 제외하고 black으로 mask
 
     return ret_img
 
+
 def return_k_means(src_img, k): # k개의 색으로 그림화
 
     t_img = src_img.reshape((-1, 3)).astype(np.float32)
@@ -26,6 +27,7 @@ def return_k_means(src_img, k): # k개의 색으로 그림화
 
     return res
 
+
 def return_line(x1, y1, x2, y2): # 기울기, y절편 리턴
     
     if x1 == x2:
@@ -35,6 +37,7 @@ def return_line(x1, y1, x2, y2): # 기울기, y절편 리턴
     y_int = y1 - m*x1
 
     return [m, y_int]
+
 
 def return_intersection(lines, points):
 
@@ -96,14 +99,15 @@ def find_threshold(img, r_x, r_y, r_w, r_h):
 
     return avg_check_img
 
+
 def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
 
     img = cv2.imread(path) # 이미지 경로
 
     # r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False) # 관심 영역 추출, space or enter 눌러야 창 종료, c로 취소
-    crop_img = img[r_y:r_y+r_h, r_x:r_x+r_w]
-    crop_img = return_green_area(crop_img)
-    k_means_crop_img = return_k_means(crop_img, 4)
+    crop_img = img[r_y:r_y+r_h, r_x:r_x+r_w] # ROI 영역으로 자르기
+    crop_img = return_green_area(crop_img) # 필드 제외 마스킹
+    k_means_crop_img = return_k_means(crop_img, 4) # 그림화
 
     img_gray = cv2.cvtColor(k_means_crop_img, cv2.COLOR_BGR2GRAY)  # grayscale로 변환
     img_gray_norm = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX) # normalize
@@ -114,22 +118,19 @@ def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
     plt.show()
 
     canny = cv2.Canny(thr, 50, 255, apertureSize=3)
-
     # canny 보기
     plt.imshow(canny) # canny에서 구분 잘 안되면 다시
     plt.show()
 
-    lines = cv2.HoughLines(canny,1,np.pi/180,180)
+    lines = cv2.HoughLines(canny,1,np.pi/180,150)
 
     line_points = []
     offside_lines = []
-
     point_cache = []
 
     cnt = 0
     for i in range(len(lines)):
         for rho, theta in lines[i]:
-
 
             a = np.cos(theta)
             b = np.sin(theta)
@@ -138,18 +139,18 @@ def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
 
             x0 = a*rho
             y0 = b*rho
-            if check_point(x0, y0, point_cache) == False: continue
+            print(x0, y0)
+            # if check_point(x0, y0, point_cache) == False: continue
             
             x1 = int(x0 + 1000*(-b))
             y1 = int(y0+1000*(a))
             x2 = int(x0 - 1000*(-b))
             y2 = int(y0 -1000*(a))
 
-            print((r_x+x1,r_y+y1), (r_x+x2,r_y+y2))
+            # print((r_x+x1,r_y+y1), (r_x+x2,r_y+y2))
 
             [ret_m, ret_y_int] = return_line(r_x+x1,r_y+y1,r_x+x2,r_y+y2)
             if ret_m == 0 : continue
-
 
             c_flag = False
             for i in range(len(line_points)):
@@ -165,7 +166,7 @@ def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
             cv2.line(img,(r_x+x1,r_y+y1),(r_x+x2,r_y+y2),(255,0,0),2)
 
     v_x, v_y = return_intersection(offside_lines, line_points)
-    print("Vanishing point: ", v_x, ", ",v_y)
+    # print("Vanishing point: ", v_x, ", ",v_y)
 
     cv2.line(img,(v_x, v_y),(1000, 1080),(0,0,255),2)
     plt.imshow(img)
@@ -173,7 +174,6 @@ def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
 
     return (v_x, v_y)
     # 0, 0이면 잘못된거 그냥 없애기
-
 
 
 def find_offside_line(folder_path):
@@ -189,8 +189,8 @@ def find_offside_line(folder_path):
 
         img_i = img_list[i]
         img = cv2.imread(img_i)
+        print(img_i)
 
-        
         if i == 0:
             r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False)
             img_thr = find_threshold(img, r_x, r_y, r_w, r_h)
@@ -198,18 +198,19 @@ def find_offside_line(folder_path):
         vanishing_x, vanishing_y = find_offside_line_one_image(img_i, r_x, r_y, r_w, r_h, img_thr)
         
         if vanishing_x == 0 and vanishing_y == 0:
-            print(i, vanishing_x, vanishing_y)
+            # print(i, vanishing_x, vanishing_y)
             # prev_x, prev_y에서 선 긋기
             continue
 
         # vanishing에서 선 긋기
         prev_x, prev_y = vanishing_x, vanishing_y
-        print(i, vanishing_x, vanishing_y)
-
-        cnt+=1
+        # print(i, vanishing_x, vanishing_y)
 
         # 공격수가 선 넘었는지 판단해서 표시해주기
 
+        cnt+=1
+
+        
 
 # find_offside_line_one_image('C:/Users/y/Desktop/URP/test_fifa3.png')
-find_offside_line('C:/Users/y/Desktop/URP/test')
+# find_offside_line('C:/Users/ys102/Desktop/URP/yolov7/yolov7/runs/detect/exp10')
