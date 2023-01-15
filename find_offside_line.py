@@ -53,13 +53,11 @@ def return_intersection(lines, points):
 
             print(lines[i][0], lines[j][0])
             if lines[i][0] == lines[j][0]: continue # 평행
-            if max(abs(points[i][0] - points[j][0]), abs(points[i][2] - points[j][0]), abs(points[i][0] - points[j][2]), abs(points[i][2] - points[j][2])) < 100:
-                continue
 
             ret_x = int((lines[j][1] - lines[i][1]) / (lines[i][0] - lines[j][0]))
             ret_y = int(lines[i][0] * (lines[j][1] - lines[i][1]) / (lines[i][0] - lines[j][0]) + lines[i][1])
 
-            if ret_y > 0: continue
+            if ret_y > -1000: continue # 여기 숫자로 정확도 조정 이미지 크기마다 다름
 
             total_x += ret_x
             total_y += ret_y
@@ -74,14 +72,6 @@ def return_intersection(lines, points):
 
     return (total_x, total_y)
 
-
-def check_point(x1, y1, points):
-
-    for [x, y] in points:
-        if (x1 - x)**2 + (y1 - y)**2 < 100:
-            return False
-    
-    return True
 
 def find_threshold(img, r_x, r_y, r_w, r_h):
 
@@ -151,13 +141,6 @@ def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
 
             [ret_m, ret_y_int] = return_line(r_x+x1,r_y+y1,r_x+x2,r_y+y2)
             if ret_m == 0 : continue
-
-            c_flag = False
-            for i in range(len(line_points)):
-                if max(abs(line_points[i][0] - r_x+x1), abs(line_points[i][2] - r_x+x1), abs(line_points[i][0] - r_x+x2), abs(line_points[i][2] -  r_x+x2)) < 100:
-                    c_flag = True
-                    break
-            if c_flag == True: continue
             
             point_cache.append([x0, y0])
             line_points.append([r_x+x1,r_y+y1,r_x+x2,r_y+y2])
@@ -166,7 +149,7 @@ def find_offside_line_one_image(path, r_x, r_y, r_w, r_h, avg_check_img):
             cv2.line(img,(r_x+x1,r_y+y1),(r_x+x2,r_y+y2),(255,0,0),2)
 
     v_x, v_y = return_intersection(offside_lines, line_points)
-    # print("Vanishing point: ", v_x, ", ",v_y)
+    print("Vanishing point: ", v_x, ", ",v_y)
 
     cv2.line(img,(v_x, v_y),(1000, 1080),(0,0,255),2)
     plt.imshow(img)
@@ -212,5 +195,6 @@ def find_offside_line(folder_path):
 
         
 
-# find_offside_line_one_image('C:/Users/y/Desktop/URP/test_fifa3.png')
-# find_offside_line('C:/Users/ys102/Desktop/URP/yolov7/yolov7/runs/detect/exp10')
+# find_offside_line_one_image('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5/fifa_record_00001.jpg')
+# find_offside_line('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
+find_offside_line('C:/Users/ys102/Desktop/URP/dataset_offside')

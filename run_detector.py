@@ -1,7 +1,7 @@
-
 import argparse
 from yolov7.detect import detect
 from find_offside_line import find_offside_line
+from draw import draw
 from find_team import find_team
 from tragectory_converter import tragectory_converter
 
@@ -32,20 +32,17 @@ if __name__ == '__main__':
     opt = parser.parse_args()
     print(opt)
 
-    # # 1. yolo detect
+    # 1. yolo detect
     # detect(opt)
 
-    # # 2. trajectory_convert
+    # 2. trajectory_convert
     # tragectory_converter(opt)
     
-    # # 3. team classify
+    # 3. team classify
     # find_team(opt)
 
     # 4. draw offside line
-    find_offside_line(opt.stopover)
+    find_offside_line('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
     
     
     # 5. +@ find pass frame
-
-
-    #find_offside_line('C:/Users/y/Desktop/URP/test_fifa1.png')
