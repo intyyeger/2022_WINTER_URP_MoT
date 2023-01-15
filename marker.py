@@ -21,19 +21,19 @@ def mark_object(img, x, y, type):
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-def commit_offside(img):
+def warn_offside(img):
 
     w, h = img.shape[:2]
 
     pts = np.array([[0,0], [0,w], [h, w], [h,0]], dtype=np.int32)
     cv2.polylines(img, [pts], True, (0, 0, 255), 10)
 
-    cv2.imshow('img', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # 선 넘은 player 표시?
+
+    # cv2.imshow('img', img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
 
 # mark_object('C:/Users/ys102/Desktop/URP/1.jpg', 500, 500, 0)
 # commit_offside('C:/Users/ys102/Desktop/URP/1.jpg')
-
-

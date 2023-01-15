@@ -41,8 +41,8 @@ if __name__ == '__main__':
     # 3. team classify
     # find_team(opt)
 
-    # 4. draw offside line
-    find_offside_line('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
+    # 4. draw
+    # draw(opt)
     
     
     # 5. +@ find pass frame
