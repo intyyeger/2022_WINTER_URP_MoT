@@ -51,4 +51,5 @@ def draw(folder_path, offside):
 
         # mark_object(img)
 
-draw('C:/Users/y/Desktop/URP/test', True)
+draw('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp', True)
+# draw('C:/Users/y/Desktop/URP/detect_line', True)

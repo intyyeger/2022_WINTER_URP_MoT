@@ -11,6 +11,8 @@ def return_green_area(src_img): # image green 제외하고 black으로 mask
     hsv_mask = cv2.inRange(hsv_img, (40, 80, 80), (80, 255, 255))    # bound 수정 가능
     ret_img = cv2.bitwise_and(src_img, src_img, mask=hsv_mask)
 
+    ret_img = cv2.cvtColor(ret_img, cv2.COLOR_HSV2BGR)
+
     return ret_img
 
 
@@ -76,7 +78,12 @@ def find_threshold(img, r_x, r_y, r_w, r_h):
     crop_img = return_green_area(crop_img)
     k_means_crop_img = return_k_means(crop_img, 4)
 
-    img_gray = cv2.cvtColor(k_means_crop_img, cv2.COLOR_BGR2GRAY)  # grayscale로 변환
+    # img_gray = cv2.cvtColor(k_means_crop_img, cv2.COLOR_BGR2GRAY)  # grayscale로 변환
+    # img_gray_norm = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX) # normalize
+    # img_gray_norm = 2*img_gray_norm
+
+    (h,s,v) = cv2.split(k_means_crop_img)
+    img_gray = v
     img_gray_norm = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX) # normalize
     img_gray_norm = 2*img_gray_norm
     
@@ -94,11 +101,26 @@ def find_offside_line(path, r_x, r_y, r_w, r_h, avg_check_img):
     # r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False) # 관심 영역 추출, space or enter 눌러야 창 종료, c로 취소
     crop_img = img[r_y:r_y+r_h, r_x:r_x+r_w] # ROI 영역으로 자르기
     crop_img = return_green_area(crop_img) # 필드 제외 마스킹
+    plt.imshow(crop_img) # canny에서 구분 잘 안되면 다시
+    plt.show()
     k_means_crop_img = return_k_means(crop_img, 4) # 그림화
+    plt.imshow(k_means_crop_img) # canny에서 구분 잘 안되면 다시
+    plt.show()
 
-    img_gray = cv2.cvtColor(k_means_crop_img, cv2.COLOR_BGR2GRAY)  # grayscale로 변환
+
+    # img_gray = cv2.cvtColor(k_means_crop_img, cv2.COLOR_BGR2GRAY)  # grayscale로 변환
+    (h,s,v) = cv2.split(k_means_crop_img)
+    img_gray = v
     img_gray_norm = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX) # normalize
     img_gray_norm = 2*img_gray_norm
+    plt.imshow(img_gray) # canny에서 구분 잘 안되면 다시
+    plt.show()
+    img_gray_norm = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX) # normalize
+    plt.imshow(img_gray_norm) # canny에서 구분 잘 안되면 다시
+    plt.show()
+    img_gray_norm = 2*img_gray_norm
+    plt.imshow(img_gray_norm) # canny에서 구분 잘 안되면 다시
+    plt.show()
 
     ret, thr = cv2.threshold(img_gray_norm, avg_check_img, 255, cv2.THRESH_BINARY)
     plt.imshow(thr) # canny에서 구분 잘 안되면 다시
@@ -109,7 +131,7 @@ def find_offside_line(path, r_x, r_y, r_w, r_h, avg_check_img):
     plt.imshow(canny) # canny에서 구분 잘 안되면 다시
     plt.show()
 
-    lines = cv2.HoughLines(canny,1,np.pi/180,150)
+    lines = cv2.HoughLines(canny,1,np.pi/180,180)
 
     line_points = []
     offside_lines = []
@@ -145,7 +167,7 @@ def find_offside_line(path, r_x, r_y, r_w, r_h, avg_check_img):
 
     v_x, v_y = return_intersection(offside_lines, line_points)
 
-    cv2.line(img,(v_x, v_y),(1000, 1080),(0,0,255),2)
+    # cv2.line(img,(v_x, v_y),(1000, 1080),(0,0,255),2)
     plt.imshow(img)
     plt.show()
 

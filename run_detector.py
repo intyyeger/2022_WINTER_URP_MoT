@@ -1,6 +1,5 @@
 import argparse
 from yolov7.detect import detect
-from find_offside_line import find_offside_line
 from draw import draw
 from find_team import find_team
 from tragectory_converter import tragectory_converter
@@ -33,7 +32,7 @@ if __name__ == '__main__':
     print(opt)
 
     # 1. yolo detect
-    # detect(opt)
+    detect(opt)
 
     # 2. trajectory_convert
     # tragectory_converter(opt)
