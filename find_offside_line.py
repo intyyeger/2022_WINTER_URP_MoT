@@ -100,9 +100,13 @@ def find_offside_line(path, r_x, r_y, r_w, r_h, avg_check_img):
 
     # r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False) # 관심 영역 추출, space or enter 눌러야 창 종료, c로 취소
     crop_img = img[r_y:r_y+r_h, r_x:r_x+r_w] # ROI 영역으로 자르기
-    crop_img = return_green_area(crop_img) # 필드 제외 마스킹
     plt.imshow(crop_img) # canny에서 구분 잘 안되면 다시
     plt.show()
+    crop_img = return_green_area(crop_img) # 필드 제외 마스킹
+    print(1)
+    plt.imshow(crop_img) # canny에서 구분 잘 안되면 다시
+    plt.show()
+    print(2)
     k_means_crop_img = return_k_means(crop_img, 4) # 그림화
     plt.imshow(k_means_crop_img) # canny에서 구분 잘 안되면 다시
     plt.show()

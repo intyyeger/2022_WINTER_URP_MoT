@@ -5,17 +5,19 @@ import numpy as np
 def mark_object(img, x, y, type):
 
     start_x = x
-    start_y = y + 10
+    start_y = y - 10
 
     pts = np.array([[start_x,start_y], [start_x+10,start_y-17], [start_x-10,start_y-17]], dtype=np.int32)
     if type == 0:
-        cv2.fillPoly(img, [pts], (236, 95,52)) # team 1
+        cv2.fillPoly(img, [pts], (236, 95,52)) # ball
     elif type == 1:
-        cv2.fillPoly(img, [pts], (133,66,249)) # team 2
+        cv2.fillPoly(img, [pts], (133,66,249)) # team 1
     elif type == 2:
-        cv2.fillPoly(img, [pts], (208,45,153)) # ball
+        cv2.fillPoly(img, [pts], (208,45,153)) # team 2
     elif type == 3:
-        cv2.fillPoly(img, [pts], (30,30,30)) # goalkeeper, referee
+        cv2.fillPoly(img, [pts], (30,30,30)) # referee
+    elif type == 4:
+        cv2.fillPoly(img, [pts], (100,100,100)) # goalkeeper
 
     # cv2.imshow('img', img)
     # cv2.waitKey(0)
