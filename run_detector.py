@@ -1,18 +1,10 @@
-import os
 import argparse
-import cv2
-import glob
 from yolov7.detect import detect
-from find_offside_line import find_offside_line
+from draw import draw
 from find_team import find_team
-from find_team import createDirectory
 from tragectory_converter import tragectory_converter
-import numpy as np
-import pandas as pd
-from tqdm import tqdm
-from sklearn.cluster import KMeans
+from convert_yolov7_to_coco import convert_yolov7_to_coco
 
-os.environ["OMP_NUM_THREADS"] = "1" 
 
 if __name__ == '__main__':
 
@@ -41,18 +33,19 @@ if __name__ == '__main__':
     print(opt)
 
     # 1. yolo detect
-    detect(opt)
+    # detect(opt)
+
     # 2. trajectory_convert
-    stopover = opt.stopover
-    print(stopover)
-    # trajectory_convert(stopover)
+    # tragectory_converter(opt)
+    
     # 3. team classify
-    # find_team(stopover)
-    # 4. draw offside line
-    find_offside_line(stopover)
-    find_team(opt)
-    tragectory_converter(opt)
+    # find_team(opt)
+
+    gt = convert_yolov7_to_coco('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5/labels', 'C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
+
+    # 4. draw
+    draw('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5', False, gt)
+    
+    
+    
     # 5. +@ find pass frame
-
-
-    #find_offside_line('C:/Users/y/Desktop/URP/test_fifa1.png')
