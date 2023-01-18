@@ -9,7 +9,7 @@ from find_offside_line import find_threshold, find_offside_line
 
 def draw(folder_path, offside, gt):
 
-    img_path = folder_path + '/*' + '.jpg'
+    img_path = folder_path + '/*' + '.png'
     img_list = [img for img in glob.glob(f'{img_path}')]
 
     print('Drawing...')
@@ -22,24 +22,24 @@ def draw(folder_path, offside, gt):
         img_i = img_list[i]
         img = cv2.imread(img_i)
         
-        frame = i + 1
-        while gt[idx][0] == frame:
+        # frame = i + 1
+        # while gt[idx][0] == frame:
 
-            mark_object(img, int(gt[idx][2] + 0.5*gt[idx][4]), int(gt[idx][3]), int(gt[idx][7]))
-            print(int(gt[idx][2] + 0.5*gt[idx][4]), int(gt[idx][3]), int(gt[idx][7]))
-            idx += 1
+        #     mark_object(img, int(gt[idx][2] + 0.5*gt[idx][4]), int(gt[idx][3]), int(gt[idx][7]))
+        #     print(int(gt[idx][2] + 0.5*gt[idx][4]), int(gt[idx][3]), int(gt[idx][7]))
+        #     idx += 1
 
-        cv2.imshow('img', img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # cv2.imshow('img', img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
-        # if offside == True:
+        if offside == True:
 
-        #     if i == 0:
-        #         r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False)
-        #         img_thr = find_threshold(img, r_x, r_y, r_w, r_h)
+            if i == 0:
+                r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False)
+                img_thr = find_threshold(img, r_x, r_y, r_w, r_h)
 
-        #     vanishing_x, vanishing_y = find_offside_line(img_i, r_x, r_y, r_w, r_h, img_thr)
+            vanishing_x, vanishing_y = find_offside_line(img_i, r_x, r_y, r_w, r_h, img_thr)
             
         #     if vanishing_x == 0 and vanishing_y == 0:
 
@@ -61,3 +61,4 @@ def draw(folder_path, offside, gt):
 
 # draw('C:/Users/y/Desktop/URP/test', True)
 # draw('C:/Users/y/Desktop/URP/detect_line', True)
+draw('C:/Users/y/Desktop/URP/test', True, [1])

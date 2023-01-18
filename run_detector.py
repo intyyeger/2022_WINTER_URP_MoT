@@ -41,10 +41,11 @@ if __name__ == '__main__':
     # 3. team classify
     # find_team(opt)
 
-    gt = convert_yolov7_to_coco('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5/labels', 'C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
+    # gt = convert_yolov7_to_coco('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5/labels', 'C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
 
-    # 4. draw
-    draw('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5', False, gt)
+    # # 4. draw
+    # draw('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5', False, gt)
+    draw('C:/Users/y/Desktop/URP/test', True, [1])
     
     
     
