@@ -11,10 +11,6 @@ def return_green_area(src_img): # image green 제외하고 black으로 mask
     hsv_mask = cv2.inRange(hsv_img, (40, 80, 80), (80, 255, 255))    # bound 수정 가능
     ret_img = cv2.bitwise_and(src_img, src_img, mask=hsv_mask)
 
-    cv2.imshow('img', ret_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     ret_img = cv2.cvtColor(ret_img, cv2.COLOR_HSV2BGR)
 
     return ret_img
@@ -104,49 +100,18 @@ def find_offside_line(path, r_x, r_y, r_w, r_h, avg_check_img):
 
     # r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False) # 관심 영역 추출, space or enter 눌러야 창 종료, c로 취소
     crop_img = img[r_y:r_y+r_h, r_x:r_x+r_w] # ROI 영역으로 자르기
-    cv2.imshow('img', crop_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
     crop_img = return_green_area(crop_img) # 필드 제외 마스킹
-    print(1)
-    cv2.imshow('img', crop_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
     k_means_crop_img = return_k_means(crop_img, 4) # 그림화
-    cv2.imshow('img', k_means_crop_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
 
     # img_gray = cv2.cvtColor(k_means_crop_img, cv2.COLOR_BGR2GRAY)  # grayscale로 변환
     (h,s,v) = cv2.split(k_means_crop_img)
     img_gray = v
     img_gray_norm = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX) # normalize
-    
-    cv2.imshow('img', img_gray)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    
-    cv2.imshow('img', img_gray_norm)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     img_gray_norm = 2*img_gray_norm
 
-    cv2.imshow('img', img_gray_norm)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     ret, thr = cv2.threshold(img_gray_norm, avg_check_img, 255, cv2.THRESH_BINARY)
-    cv2.imshow('img', thr)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
     canny = cv2.Canny(thr, 50, 255, apertureSize=3)
-    # canny 보기
-    cv2.imshow('img', canny)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
     lines = cv2.HoughLines(canny,1,np.pi/180,180)
 

@@ -1,4 +1,4 @@
-# from ByteTrack.yolox.tracker.byte_tracker import BYTETracker
+from ByteTrack.yolox.tracker.byte_tracker import BYTETracker
 from tqdm import tqdm
 import cv2
 
@@ -11,33 +11,35 @@ class BYTETrackerArgs:
     mot20: bool = False
 
 
-def yolo2byte():
+def transform_det(det):
+    
+    team1_det = []
+    team2_det = []
+    ret_det = []
 
-    src = cv2.imread('image_path')
+    for i in range(len(det)):
+        if det[i][7] == 1 or det[i][7] == 2:
+            ret_det.append(det[i])
 
-    r_x, r_y, r_w, r_h = cv2.selectROI("ROI", src, False)
-    team1_color = src[r_y:r_y+r_h, r_x:r_x+r_w]
+        if det[i][7] == 1:
+            team1_det.append(det[i])
+        elif det[i][7] == 2:
+            team2_det.append(det[i])
 
-    team1_color = cv2.mean(team1_color)
+    return team1_det, team2_det
 
-    r_x, r_y, r_w, r_h = cv2.selectROI("ROI", src, False)
-    team2_color = src[r_y:r_y+r_h, r_x:r_x+r_w]
+    
 
-    team2_color = cv2.mean(team2_color)
+def class_detection(gt):
 
-    print(team1_color)
-    print(team2_color)
+    return gt
+
+def tracking(det):
 
 
+    tracker = BYTETracker(BYTETrackerArgs())
 
-# def tracking():
+    det = transform_det(det)
+    for frame in range(5):
 
-#     for frame in tqdm()
-
-#     tracker = BYTETracker(BYTETrackerArgs())
-
-#     for image in images:
-#         dets = detector(image)
-#         online_targets = tracker.update(dets, info_imgs, img_size)
-
-yolo2byte()
+        team1_detections, team2_detections = transform_det(det)

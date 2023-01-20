@@ -6,6 +6,10 @@ import copy
 import torch
 import torch.nn.functional as F
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
 from .kalman_filter import KalmanFilter
 from yolox.tracker import matching
 from .basetrack import BaseTrack, TrackState
