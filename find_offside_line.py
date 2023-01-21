@@ -120,6 +120,10 @@ def find_offside_line(path, r_x, r_y, r_w, r_h, avg_check_img):
     point_cache = []
 
     cnt = 0
+
+    if lines is None:
+        return (0, 0)
+
     for i in range(len(lines)):
         for rho, theta in lines[i]:
 

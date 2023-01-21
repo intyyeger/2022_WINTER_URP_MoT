@@ -18,19 +18,20 @@ def draw(folder_path, offside, gt):
     prev_x, prev_y = 0, 0
 
     idx = 0
-    last_defender = []
+    
     for i in tqdm(range(len(img_list))):
 
         img_i = img_list[i]
         img = cv2.imread(img_i)
+
+        last_defender = []
         
-        last_defender.append([2000, 0])
         frame = i + 1
         while gt[idx][0] == frame:
 
             mark_object(img, int(gt[idx][2] + 0.5*gt[idx][4]), int(gt[idx][3]), int(gt[idx][7]))
-            if last_defender[i][0] > gt[idx][2]:
-                last_defender[i] = [gt[idx][2], gt[idx][3] + gt[idx][5]]
+            last_defender.append([gt[idx][2], gt[idx][3] + gt[idx][5]])
+                
             idx += 1
 
 
@@ -45,8 +46,13 @@ def draw(folder_path, offside, gt):
                 vanishing_x, vanishing_y = prev_x, prev_y
             prev_x, prev_y = vanishing_x, vanishing_y
 
-            [m, y_int] = return_line(vanishing_x, vanishing_y, last_defender[i][0], last_defender[i][1])
-            cv2.line(img,(vanishing_x, vanishing_y),(0, int(y_int)),(0,0,255),2)
+            ret_y_int = 2000
+            for def_idx in range(len(last_defender)):
+                [m, y_int] = return_line(vanishing_x, vanishing_y, last_defender[def_idx][0], last_defender[def_idx][1])
+
+                if y_int > 0 and ret_y_int > y_int: ret_y_int = y_int
+            
+            cv2.line(img,(vanishing_x, vanishing_y),(0, int(ret_y_int)),(0,0,255),2)
 
             cv2.imshow('img', img)
             cv2.waitKey(0)
@@ -72,4 +78,4 @@ def draw(folder_path, offside, gt):
 
 # draw('C:/Users/y/Desktop/URP/test', True)
 # draw('C:/Users/y/Desktop/URP/detect_line', True)
-draw('C:/Users/y/Desktop/URP/test', True, [1])
+# draw('C:/Users/y/Desktop/URP/test', True, [1])
