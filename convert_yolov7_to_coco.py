@@ -25,7 +25,7 @@ def tragectory_converter(path):
     #input_path = os.getcwd() + args.project+'/'+args.name + "/label/*.txt"
     #createDirectory("./"+args.stopover)
     input_path = path + '/*.txt'
-    file_list = [f for f in glob.glob(input_path)]
+    file_list = sorted([f for f in glob.glob(input_path)])
     
     track_list = [] #ball location
     miss_index = []
@@ -108,9 +108,9 @@ def tragectory_converter(path):
 
 def first_frame_color(file_path, image_path):
     input_path = file_path + '/*.txt'
-    file_list = [f for f in glob.glob(input_path)]
+    file_list = sorted([f for f in glob.glob(input_path)])
     input_path = image_path + '/*.jpg'
-    image_list = [f for f in glob.glob(input_path)]
+    image_list = sorted([f for f in glob.glob(input_path)])
     
     with open(file_list[0], "r") as f:
         label = [line.rstrip('\n') for line in f]
@@ -147,9 +147,9 @@ def convert_yolov7_to_coco(file_path, image_path):
     team1_color, team2_color = first_frame_color(file_path, image_path)
     ball = tragectory_converter(file_path)
     input_path = file_path + '/*.txt'
-    file_list = [f for f in glob.glob(input_path)]
+    file_list = sorted([f for f in glob.glob(input_path)])
     input_path = image_path + '/*.jpg'
-    image_list = [f for f in glob.glob(input_path)]
+    image_list = sorted([f for f in glob.glob(input_path)])
 
     gt = []
     for idx, i in tqdm(enumerate(file_list)): #for each frame
@@ -177,8 +177,5 @@ def convert_yolov7_to_coco(file_path, image_path):
                 gt.append([idx+1, -1]+ccwh_to_xywh(buf[1],buf[2],buf[3],buf[4])+[buf[5], 3, -1])
             elif buf[0] == 3:
                 gt.append([idx+1, -1]+ccwh_to_xywh(buf[1],buf[2],buf[3],buf[4])+[buf[5], 4, -1])
-    print(pd.DataFrame(gt))
+    #print(pd.DataFrame(gt))
     return gt
-if __name__ == '__main__':
-    pd.DataFrame(convert_yolov7_to_coco(os.getcwd()+'/labels', os.getcwd() + '/SNMOT-060/img1')).to_csv(os.getcwd()+'/gt.txt',header=None,index=None)
-    
