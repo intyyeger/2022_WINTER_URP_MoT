@@ -5,6 +5,7 @@ from find_team import find_team
 from tragectory_converter import tragectory_converter
 from convert_yolov7_to_coco import convert_yolov7_to_coco
 from association import transform_det, tracking
+from association import transform_det, tracking
 
 
 if __name__ == '__main__':
@@ -51,6 +52,8 @@ if __name__ == '__main__':
 
     # # 4. draw
     # draw('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5', False, gt)
+    # draw('C:/Users/y/Desktop/URP/test', True, [1])
+    # draw('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp', True, gt)
     # draw('C:/Users/y/Desktop/URP/test', True, [1])
     # draw('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp', True, gt)
     

@@ -1,7 +1,4 @@
-import cv2
-import torch
-import numpy as np
-import glob
+# from ByteTrack.yolox.tracker.byte_tracker import BYTETracker
 from tqdm import tqdm
 
 from marker import mark_object, warn_offside
@@ -121,13 +118,10 @@ def tracking(folder_path, det, offside):
             t_y = int(t.tlbr[3])
             t_id = str(t.track_id)
 
-            cv2.putText(img, t_id, (t_x, t_y), cv2.FONT_HERSHEY_PLAIN, 2, (255, 204, 255), 2, cv2.LINE_AA)
+#     for frame in tqdm()
 
-        
-        if i >= 70:
-            cv2.imshow('img', img)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
-        # cv2.imshow('img', img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
+#     tracker = BYTETracker(BYTETrackerArgs())
+
+#     for image in images:
+#         dets = detector(image)
+#         online_targets = tracker.update(dets, info_imgs, img_size)
