@@ -1,8 +1,13 @@
 import numpy as np
 import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import glob
 import motmetrics as mm
 
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
 from yolox.evaluators.evaluation import Evaluator
 
 
@@ -115,9 +120,13 @@ def dti(txt_path, save_path, n_min=25, n_dti=20):
 
 
 if __name__ == '__main__':
-    data_root = '/opt/tiger/demo/ByteTrack/datasets/mot/test'
-    txt_path = '/opt/tiger/demo/ByteTrack/YOLOX_outputs/yolox_x_mix_det/track_results'
-    save_path = '/opt/tiger/demo/ByteTrack/YOLOX_outputs/yolox_x_mix_det/track_results_dti'
+    # data_root = '/opt/tiger/demo/ByteTrack/datasets/mot/test'
+    # txt_path = '/opt/tiger/demo/ByteTrack/YOLOX_outputs/yolox_x_mix_det/track_results'
+    # save_path = '/opt/tiger/demo/ByteTrack/YOLOX_outputs/yolox_x_mix_det/track_results_dti'
+
+    txt_path = 'C:/Users/ys102/Desktop/URP/mot/gt'
+    data_root = 'C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp/labels'
+    save_path = 'C:/Users/ys102/Desktop/URP/mot'
     
     mkdir_if_missing(save_path)
     dti(txt_path, save_path, n_min=5, n_dti=20)

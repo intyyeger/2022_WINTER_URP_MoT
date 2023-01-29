@@ -1,22 +1,27 @@
 from loguru import logger
 
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 import torch
 import torch.backends.cudnn as cudnn
 from torch.nn.parallel import DistributedDataParallel as DDP
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
 from yolox.core import launch
 from yolox.exp import get_exp
 from yolox.utils import configure_nccl, fuse_model, get_local_rank, get_model_info, setup_logger
 from yolox.evaluators import MOTEvaluator
 
 import argparse
-import os
 import random
 import warnings
 import glob
 import motmetrics as mm
 from collections import OrderedDict
-from pathlib import Path
+
 
 
 # 구조 자체는 MOT를 평가하기 위해서는 Batch를 1로 지정하여 각 프레임마다 Object detection모델로 Detecting하여 Association 합니다.

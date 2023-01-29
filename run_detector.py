@@ -4,6 +4,7 @@ from draw import draw
 from find_team import find_team
 from tragectory_converter import tragectory_converter
 from convert_yolov7_to_coco import convert_yolov7_to_coco
+from association import transform_det, tracking
 
 
 if __name__ == '__main__':
@@ -41,11 +42,17 @@ if __name__ == '__main__':
     # 3. team classify
     # find_team(opt)
 
-    # gt = convert_yolov7_to_coco('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5/labels', 'C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
+    # gt = convert_yolov7_to_coco('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp/labels', 'C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp')
+    # tracking('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp', gt, True)
+
+    # gt = convert_yolov7_to_coco('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp/labels', 'C:/Users/ys102/Desktop/URP/soccernet/path/to/SoccerNet/tracking/train/SNMOT-060/img1')
+    det = convert_yolov7_to_coco('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5/labels', 'C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5')
+    tracking('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5', det, True)
 
     # # 4. draw
     # draw('C:/Users/y/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp5', False, gt)
-    draw('C:/Users/y/Desktop/URP/test', True, [1])
+    # draw('C:/Users/y/Desktop/URP/test', True, [1])
+    # draw('C:/Users/ys102/Desktop/URP/2022_WINTER_URP_MoT/runs/detect/exp', True, gt)
     
     
     

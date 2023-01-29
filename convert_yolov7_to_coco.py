@@ -106,11 +106,29 @@ def tragectory_converter(path):
 
     return miss_comp
 
+
+def find_first_frame_color(image_path):
+
+    input_path = image_path + '/*.jpg'
+    image_list = sorted([f for f in glob.glob(input_path)])
+
+    img = cv2.imread(image_list[0])
+
+    r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False)
+    team1_color = img[r_y:r_y+r_h, r_x:r_x+r_w]
+    r_x, r_y, r_w, r_h = cv2.selectROI("ROI", img, False)
+    team2_color = img[r_y:r_y+r_h, r_x:r_x+r_w]
+
+
+    return team1_color, team2_color
+
+
+
 def first_frame_color(file_path, image_path):
     input_path = file_path + '/*.txt'
-    file_list = [f for f in glob.glob(input_path)]
+    file_list = sorted([f for f in glob.glob(input_path)])
     input_path = image_path + '/*.jpg'
-    image_list = [f for f in glob.glob(input_path)]
+    image_list = sorted([f for f in glob.glob(input_path)])
     
     with open(file_list[0], "r") as f:
         label = [line.rstrip('\n') for line in f]
@@ -125,7 +143,8 @@ def first_frame_color(file_path, image_path):
             y = int(label_list[2]*1080)+1
             w = int(label_list[3]*1920 / 2)+1
             h = int(label_list[4]*1080 / 2)+1
-            crop_image = src[int(y) : int(y+h/2), int(x-w/2):int(x+w/2),:]
+
+            crop_image = src[int(y-h/2) :int(y) , int(x-w/4):int(x+w/4),:]
             crop_image = crop_image.mean(axis = 0).mean(axis = 0)
             data.append(crop_image)
 
@@ -144,12 +163,13 @@ def first_frame_color(file_path, image_path):
     return team1_color, team2_color #1-dimension numpy array [B,G,R]
 
 def convert_yolov7_to_coco(file_path, image_path):
-    team1_color, team2_color = first_frame_color(file_path, image_path)
+    # team1_color, team2_color = first_frame_color(file_path, image_path)
+    team1_color, team2_color = find_first_frame_color(image_path)
     ball = tragectory_converter(file_path)
     input_path = file_path + '/*.txt'
-    file_list = [f for f in glob.glob(input_path)]
+    file_list = sorted([f for f in glob.glob(input_path)])
     input_path = image_path + '/*.jpg'
-    image_list = [f for f in glob.glob(input_path)]
+    image_list = sorted([f for f in glob.glob(input_path)])
 
     gt = []
     for idx, i in tqdm(enumerate(file_list)): #for each frame
